@@ -1,0 +1,38 @@
+:root {
+    --primary: #8B4513; /* Cheese-brown theme */
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+}
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+}
+
+.stat-card {
+    background: #f8f8f8;
+    padding: 1rem;
+    margin: 1rem;
+    display: inline-block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cheese Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+    <h1>Artisanal Cheeses</h1>
+    <div class="cart-link">
+        <a href="/cart.html">Cart (<span id="cart-count">0</span>)</a>
+    </div>
+</header>
+
+<div class="filters">
+    <input type="text" placeholder="Search..." id="search-input">
+    <select id="category-filter">
+        <option value="">All Categories</option>
+        <option value="Hard">Hard Cheeses</option>
+        <option value="Soft">Soft Cheeses</option>
+    </select>
+</div>
+
+<div class="product-grid" id="product-container"></div>
+
+<script src="/js/filters.js"></script>
+<script>
+    async function loadProducts() {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+        const filtered = window.productFilter.apply(products);
+
+        document.getElementById('product-container').innerHTML = filtered
+            .map(product => `
+          <div class="product-card">
+            <h3>${product.name}</h3>
+            <p>$${product.price.toFixed(2)}</p>
+            <button onclick="window.cart.addItem(${product.id})">Add to Cart</button>
+          </div>
+        `).join('');
+    }
+
+    // Update filters
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        window.productFilter.filters.search = e.target.value;
+        loadProducts();
+    });
+
+    document.getElementById('category-filter').addEventListener('change', (e) => {
+        window.productFilter.filters.category = e.target.value;
+        loadProducts();
+    });
+
+    loadProducts();
+</script>
+</body>
+</html>

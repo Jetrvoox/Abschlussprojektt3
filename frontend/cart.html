@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Shopping Cart</h1>
+<div id="cart-items"></div>
+<button onclick="window.location.href='/checkout.html'">Checkout</button>
+
+<script src="/js/cart.js"></script>
+<script>
+    async function displayCart() {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+
+        const cartItems = window.cart.items.map(item => {
+            const product = products.find(p => p.id === item.id);
+            return `
+          <div class="cart-item">
+            <h3>${product.name}</h3>
+            <p>Quantity: ${item.quantity}</p>
+            <button onclick="window.cart.removeItem(${item.id})">Remove</button>
+          </div>
+        `;
+        }).join('');
+
+        document.getElementById('cart-items').innerHTML = cartItems;
+    }
+
+    document.addEventListener('DOMContentLoaded', displayCart);
+</script>
+</body>
+</html>
