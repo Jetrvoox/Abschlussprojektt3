@@ -26,4 +26,10 @@ class Cart {
 // Initialize cart on page load
 document.addEventListener('DOMContentLoaded', () => {
     window.cart = new Cart();
+    updateCartCount();
 });
+
+function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) cartCount.textContent = window.cart.items.length;
+}

@@ -1,25 +1,36 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
-module.exports = {
-    authenticate: async (req, res, next) => {
+const authenticate = async (req, res, next) => {
+    try {
         const token = req.cookies.jwt;
-        if (!token) return res.redirect('/login.html');
 
-        try {
-            const decoded = jwt.verify(token, 'cheese_secret');
-            const user = await User.findByPk(decoded.id);
-            if (!user) throw new Error();
-            req.user = user;
-            next();
-        } catch (err) {
-            res.clearCookie('jwt');
-            res.redirect('/login.html');
+        if (!token) {
+            return res.status(401).redirect('/login.html');
         }
-    },
 
-    isAdmin: (req, res, next) => {
-        if (req.user?.role !== 'admin') return res.status(403).send('Forbidden');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'cheese_secret');
+        const user = await User.findByPk(decoded.id);
+
+        if (!user) {
+            res.clearCookie('jwt');
+            return res.status(401).redirect('/login.html');
+        }
+
+        req.user = user;
         next();
+
+    } catch (error) {
+        res.clearCookie('jwt');
+        res.status(401).redirect('/login.html');
     }
 };
+
+const isAdmin = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
+        return next();
+    }
+    res.status(403).send('Forbidden - Admin access required');
+};
+
+module.exports = { authenticate, isAdmin };

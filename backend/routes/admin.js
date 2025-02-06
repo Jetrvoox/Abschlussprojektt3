@@ -1,20 +1,22 @@
 const router = require('express').Router();
-const { Product, Order } = require('../models');
 const { authenticate, isAdmin } = require('../middlewares/auth');
+const { Product, Order } = require('../models');
 
-router.use(authenticate);
-router.use(isAdmin);
+router.get('/dashboard', authenticate, isAdmin, async (req, res) => {
+    try {
+        const products = await Product.findAll();
+        const orders = await Order.findAll();
 
-router.get('/dashboard', async (req, res) => {
-    const [products, orders] = await Promise.all([
-        Product.count(),
-        Order.count()
-    ]);
+        res.render('dashboard', {
+            totalProducts: products.length,
+            totalOrders: orders.length,
+            recentOrders: orders.slice(-5).reverse()
+        });
 
-    res.render('dashboard', {
-        stats: { products, orders },
-        recentOrders: await Order.findAll({ limit: 5, order: [['createdAt', 'DESC']] })
-    });
+    } catch (error) {
+        console.error('Admin dashboard error:', error);
+        res.status(500).send('Error loading dashboard');
+    }
 });
 
 module.exports = router;

@@ -2,9 +2,28 @@
 <html>
 <head>
     <title>Your Cart</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
+<header class="luxury-header">
+    <nav>
+        <div class="header-left">
+            <a href="/" class="logo">Fromagerie</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop.html">Shop</a></li>
+                <li><a href="/about.html">About</a></li>
+            </ul>
+        </div>
+        <div class="header-right">
+            <a href="/cart.html" class="cart-link">
+                Cart (<span id="cart-count">0</span>)
+            </a>
+            <a href="/login.html" class="login-link">Login</a>
+        </div>
+    </nav>
+</header>
 <h1>Shopping Cart</h1>
 <div id="cart-items"></div>
 <button onclick="window.location.href='/checkout.html'">Checkout</button>
@@ -31,5 +50,6 @@
 
     document.addEventListener('DOMContentLoaded', displayCart);
 </script>
+<script src="public/js/cart.js"></script>
 </body>
 </html>

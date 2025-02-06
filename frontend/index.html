@@ -1,57 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cheese Shop</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fromagerie | Artisanal Cheeses</title>
+    <link rel="stylesheet" href="public/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>Artisanal Cheeses</h1>
-    <div class="cart-link">
-        <a href="/cart.html">Cart (<span id="cart-count">0</span>)</a>
-    </div>
+<header class="luxury-header">
+    <nav>
+        <div class="header-left">
+            <a href="/" class="logo">Fromagerie</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop.html">Shop</a></li>
+                <li><a href="/about.html">About</a></li>
+            </ul>
+        </div>
+        <div class="header-right">
+            <a href="/cart.html" class="cart-link">
+                Cart (<span id="cart-count">0</span>)
+            </a>
+            <a href="/login.html" class="login-link">Login</a>
+        </div>
+    </nav>
 </header>
 
-<div class="filters">
-    <input type="text" placeholder="Search..." id="search-input">
-    <select id="category-filter">
-        <option value="">All Categories</option>
-        <option value="Hard">Hard Cheeses</option>
-        <option value="Soft">Soft Cheeses</option>
-    </select>
-</div>
+<main>
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Artisanal Cheeses of Distinction</h1>
+            <p>Curated selection of the world's finest artisan cheeses</p>
+            <a href="/shop.html" class="cta-button">Explore Collection</a>
+        </div>
+    </section>
 
-<div class="product-grid" id="product-container"></div>
+    <section class="featured-products">
+        <h2>Our Finest Selection</h2>
+        <div class="product-grid" id="product-container"></div>
+    </section>
+</main>
 
-<script src="/js/filters.js"></script>
+<script src="/public/js/filters.js"></script>
+<script src="/public/js/cart.js"></script>
 <script>
-    async function loadProducts() {
-        const response = await fetch('/api/products');
-        const products = await response.json();
-        const filtered = window.productFilter.apply(products);
-
-        document.getElementById('product-container').innerHTML = filtered
-            .map(product => `
-          <div class="product-card">
-            <h3>${product.name}</h3>
-            <p>$${product.price.toFixed(2)}</p>
-            <button onclick="window.cart.addItem(${product.id})">Add to Cart</button>
-          </div>
-        `).join('');
-    }
-
-    // Update filters
-    document.getElementById('search-input').addEventListener('input', (e) => {
-        window.productFilter.filters.search = e.target.value;
-        loadProducts();
+    // Initialize cart count
+    document.addEventListener('DOMContentLoaded', () => {
+        const cart = new Cart();
+        document.getElementById('cart-count').textContent = cart.items.length;
     });
 
-    document.getElementById('category-filter').addEventListener('change', (e) => {
-        window.productFilter.filters.category = e.target.value;
-        loadProducts();
-    });
-
-    loadProducts();
+    // Rest of your product loading script...
 </script>
 </body>
 </html>
